@@ -1,0 +1,24 @@
+{
+  "data": {
+    "SearchResult": {
+      "search": [
+        {
+          "elements": [
+            {
+              "__typename": "Search_ProductHit",
+              "avgProductRating": 4.844,
+              "cobrandingEnabled": false,
+              "id": "some_id",
+              "null_field": null
+            }
+          ],
+          "pagination": {
+            "cursor": "1",
+            "totalElements": 1301
+          },
+          "totalPages": 84
+        }
+      ]
+    }
+  }
+}
