@@ -9,14 +9,17 @@ def main():
     parser.add_argument('-i', '--input', required=True, help='Input JSON file')
     parser.add_argument('-o', '--output', required=True, help='Output Python file')
     parser.add_argument('-r', '--root-class-name', default='Root', help='Root class name')
+    parser.add_argument('-ik', '--ignore-keys', help='Ignore creating fields or classes matching a list of comma-separated keys')
 
     args = parser.parse_args()
 
     # Process the JSON input file and generate classes
-    with open(args.input, 'r') as json_file:
+    with open(args.input, 'r', encoding='utf-8') as json_file:
         json_data = json.load(json_file)
 
-    class_definitions = generate_python_classes_from_json(json_data, args.root_class_name)
+    ignore_keys = ik.split(',') if (ik := args.ignore_keys) else []
+
+    class_definitions = generate_python_classes_from_json(json_data, args.root_class_name, ignore_keys)
 
     # Write the generated classes to the output file
     with open(args.output, 'w') as output_file:
