@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 
 from json2py.generator import generate_python_classes_from_json
 
@@ -20,6 +21,10 @@ def main():
     ignore_keys = ik.split(',') if (ik := args.ignore_keys) else []
 
     class_definitions = generate_python_classes_from_json(json_data, args.root_class_name, ignore_keys)
+
+    command = f"\"\"\"\nGenerated with:\njson2py {' '.join(sys.argv[1:])}\n\"\"\"\n\n"
+
+    class_definitions = command + class_definitions
 
     # Write the generated classes to the output file
     with open(args.output, 'w') as output_file:

@@ -5,11 +5,13 @@ from typing import List
 
 def make_field_name(key: str):
     field_name = ''
-    for c in key:
+    for i, c in enumerate(key):
         if c.isupper():
             # camel to snake case
             field_name += '_'
             field_name += c.lower()
+        elif i == 0 and c.isnumeric():
+            field_name += f'n{c}'
         elif c in string.punctuation:
             field_name += '_'
         else:
@@ -23,6 +25,8 @@ def make_class_name(key: str):
         if c in string.punctuation:
             cap_next = True
         elif i == 0:
+            if c.isnumeric():
+                class_name += 'n'
             class_name += c.upper()
         else:
             if cap_next:
