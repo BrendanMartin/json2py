@@ -1,8 +1,29 @@
 import argparse
 import json
+import subprocess
 import sys
+from pathlib import Path
 
 from json2py.generator import generate_python_classes_from_json
+
+def successfully_generated(input_file_name, output_file_name, root_class_name):
+    module_name = Path(input_file_name).stem
+    command = (
+        'python -c '
+        '"import json; '
+        f'from {module_name} import {root_class_name}; '
+        f'f = open(\'{input_file_name}\', \'r\', encoding=\'utf-8\'); '
+        f'data = json.load(f); '
+        'f.close(); '
+        f'instance = {root_class_name}(data); "'
+    )
+    result = subprocess.run(command, shell=True, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if result.returncode != 0:
+        print('Error when testing generated class:\n', result.stderr)
+        return False
+    else:
+        print('Successfully generated classes.\n', result.stderr)
+        return True
 
 
 def main():
@@ -14,21 +35,28 @@ def main():
 
     args = parser.parse_args()
 
+    input_file_name = args.input
+    output_file_name = args.output
+    root_class_name = args.root_class_name
+
     # Process the JSON input file and generate classes
-    with open(args.input, 'r', encoding='utf-8') as json_file:
+    with open(input_file_name, 'r', encoding='utf-8') as json_file:
         json_data = json.load(json_file)
 
     ignore_keys = ik.split(',') if (ik := args.ignore_keys) else []
 
-    class_definitions = generate_python_classes_from_json(json_data, args.root_class_name, ignore_keys)
+    class_definitions = generate_python_classes_from_json(json_data, root_class_name, ignore_keys)
 
     command = f"\"\"\"\nGenerated with:\njson2py {' '.join(sys.argv[1:])}\n\"\"\"\n\n"
 
     class_definitions = command + class_definitions
 
     # Write the generated classes to the output file
-    with open(args.output, 'w') as output_file:
+    with open(output_file_name, 'w') as output_file:
         output_file.write(class_definitions)
+
+    if not successfully_generated(input_file_name, output_file_name, root_class_name):
+        return
 
 if __name__ == '__main__':
     main()

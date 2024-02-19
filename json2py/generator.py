@@ -89,8 +89,10 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
                 class_code += f"        self.{field_name} = {prop_type}(item) if (item := data.get('{prop}')) else None\n"
             else:
                 # Handle simple types (including simple lists) directly without conversion
-                default_value = "[]" if is_list else "None"
-                class_code += f"        self.{field_name} = data.get('{prop}', {default_value})\n"
+                if is_list:
+                    class_code += f"        self.{field_name} = data.get('{prop}', [])\n"
+                else:
+                    class_code += f"        self.{field_name} = data.get('{prop}')\n"
         class_code += "\n"
         return class_code
 
