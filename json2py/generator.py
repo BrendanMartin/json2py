@@ -1,7 +1,7 @@
 import json
 import string
 from typing import List
-
+from nltk.corpus import wordnet as wn
 
 def make_field_name(key: str):
     field_name = ''
@@ -12,18 +12,22 @@ def make_field_name(key: str):
             field_name += c.lower()
         elif i == 0 and c.isnumeric():
             field_name += f'n{c}'
-        elif c in string.punctuation:
+        elif c in string.punctuation or c.isspace():
             field_name += '_'
         else:
             field_name += c
     return field_name.lstrip('_')
 
 def make_class_name(key: str):
+    if (k := wn.morphy(key.lower())):
+        key = k
     class_name = ''
     cap_next = False
     for i, c in enumerate(key):
         if c in string.punctuation:
             cap_next = True
+        elif c.isspace():
+            c += '_'
         elif i == 0:
             if c.isnumeric():
                 class_name += 'n'

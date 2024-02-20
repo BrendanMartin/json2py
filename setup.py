@@ -1,7 +1,15 @@
+import nltk
 from setuptools import setup, find_packages
+from setuptools.command.install import install
+
+
+class InstallCommand(install):
+    def run(self):
+        install.run(self)
+        nltk.download('wordnet')
 
 setup(
-        name='your_package_name',
+        name='json2py',
         version='0.1.0',
         packages=find_packages(),
         entry_points={
@@ -9,4 +17,8 @@ setup(
                 'json2py=json2py.main:main',
             ],
         },
+        install_requires=['nltk'],
+        cmdclass={
+            'install': InstallCommand,
+        }
 )
