@@ -1,7 +1,10 @@
 import json
 import string
+from collections import OrderedDict
 from typing import List
 from nltk.corpus import wordnet as wn
+
+reserved_words = ['class']
 
 def make_field_name(key: str):
     field_name = ''
@@ -16,7 +19,10 @@ def make_field_name(key: str):
             field_name += '_'
         else:
             field_name += c
-    return field_name.lstrip('_')
+    field_name = field_name.lstrip('_')
+    if field_name in reserved_words:
+        field_name = field_name + '_'
+    return field_name
 
 def make_class_name(key: str):
     if (k := wn.morphy(key.lower())):
@@ -37,10 +43,12 @@ def make_class_name(key: str):
                 c = c.upper()
                 cap_next = False
             class_name += c
+    if class_name in reserved_words:
+        class_name = class_name + '_'
     return class_name
 
 def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=List[str]):
-    class_definitions = {}
+    class_definitions = OrderedDict()
     imports = ""
     # imports = "import json\n\n"
 
@@ -102,7 +110,7 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
 
     # Generate Python code for all class definitions
     all_classes_code = ""
-    for class_name, properties in class_definitions.items():
+    for class_name, properties in reversed(class_definitions.items()):
         all_classes_code += generate_class_code(class_name, properties)
 
     return imports + all_classes_code

@@ -1,4 +1,3 @@
-import nltk
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 
@@ -6,6 +5,7 @@ from setuptools.command.install import install
 class InstallCommand(install):
     def run(self):
         install.run(self)
+        import nltk
         nltk.download('wordnet')
 
 setup(
@@ -18,6 +18,7 @@ setup(
             ],
         },
         install_requires=['nltk'],
+        setup_requires=['nltk'],
         cmdclass={
             'install': InstallCommand,
         }

@@ -1,4 +1,6 @@
+import json
 import unittest
+from pathlib import Path
 
 from json2py.generator import generate_python_classes_from_json, make_class_name
 
@@ -97,9 +99,6 @@ class GeneratorTestCase(unittest.TestCase):
         for t in tests:
             res = make_class_name(t[0])
             self.assertEqual(t[1], res)
-
-
-
 
 
 
