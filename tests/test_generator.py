@@ -9,6 +9,7 @@ class GeneratorTestCase(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.fixtures = Path(__file__).parent / 'fixtures'
         cls.json_data = {
             'data': {
                 'SearchResult': {
@@ -100,7 +101,11 @@ class GeneratorTestCase(unittest.TestCase):
             res = make_class_name(t[0])
             self.assertEqual(t[1], res)
 
+    def test_root_is_list(self):
+        with open(self.fixtures/'list_example.json', 'r') as f:
+            j = json.load(f)
 
+        python_code = generate_python_classes_from_json(j)
 
 
 if __name__ == '__main__':

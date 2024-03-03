@@ -1,0 +1,16 @@
+[
+    {
+        "key": "nd002",
+        "reviewSummary": {
+            "numberOfReviews": 1184,
+            "starsAverage": 4.8
+        }
+    },
+    {
+        "key": "nd101",
+        "reviewSummary": {
+            "numberOfReviews": 909,
+            "starsAverage": 4.7
+        }
+    }
+]
