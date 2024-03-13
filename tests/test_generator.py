@@ -2,7 +2,7 @@ import json
 import unittest
 from pathlib import Path
 
-from json2py.generator import generate_python_classes_from_json, make_class_name
+from json2py.generator import generate_python_classes_from_json, make_class_name, make_field_name
 
 
 class GeneratorTestCase(unittest.TestCase):
@@ -33,7 +33,8 @@ class GeneratorTestCase(unittest.TestCase):
                         }
                     ]
                 }
-            }
+            },
+            "__N_SSP": True
         }
 
     @classmethod
@@ -94,11 +95,25 @@ class GeneratorTestCase(unittest.TestCase):
         tests = [
             ('lowerUpper', 'LowerUpper'),
             ('underscored_name', 'UnderscoredName'),
-            ('complex-name_with.punc', 'ComplexNameWithPunc')
+            ('complex-name_with.punc', 'ComplexNameWithPunc'),
+            ('cats', 'Cat'), # test de-pluralization
+            ('physics', 'Physics')
         ]
 
         for t in tests:
             res = make_class_name(t[0])
+            self.assertEqual(t[1], res)
+
+    def test_make_field_name(self):
+        tests = [
+            ('FooBar', 'foo_bar'),
+            ('_foo_bar', 'foo_bar'),
+            ('foo_bar__', 'foo_bar'),
+            ('__N_SSG', 'n_ssg'),
+            ('__N_SSP', 'n_ssp')
+        ]
+        for t in tests:
+            res = make_field_name(t[0])
             self.assertEqual(t[1], res)
 
     def test_root_is_list(self):

@@ -1,4 +1,5 @@
 import json
+import keyword
 import string
 from collections import OrderedDict
 from dataclasses import dataclass
@@ -6,22 +7,29 @@ from typing import List, Dict
 import typing
 from nltk.corpus import wordnet as wn
 
-reserved_words = ['class']
-
+reserved_words = list(keyword.kwlist)
+reserved_words.extend(['type'])
 
 def make_field_name(key: str):
     field_name = ''
+    prev_c = ''
+    next_c = ''
+    key = key.strip('_')
     for i, c in enumerate(key):
+        if i + 1 < len(key):
+            next_c = key[i + 1]
         if c.isupper():
             # camel to snake case
-            field_name += '_'
+            if prev_c != '_' and not next_c.isupper():
+                field_name += '_'
             field_name += c.lower()
         elif i == 0 and c.isnumeric():
             field_name += f'n{c}'
-        elif c in string.punctuation or c.isspace():
+        elif (c in string.punctuation and c != '_') or c.isspace():
             field_name += '_'
         else:
             field_name += c
+        prev_c = c
     field_name = field_name.lstrip('_')
     if field_name in reserved_words:
         field_name = field_name + '_'
@@ -90,8 +98,6 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
                 # Handle nested dictionary
                 if isinstance(value, dict) and len(value.keys()) > 0:
                     nested_class_name = make_class_name(key)
-                    # properties[key] = Element(nested_class_name, False,
-                    #                              False)  # (class name, is list, is simple type)
                     properties.append(Property(
                             key,
                             Element(nested_class_name, False, False)  # (class name, is list, is simple type)
@@ -102,28 +108,24 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
                     if value and isinstance(value[0], dict):
                         # List of dictionaries
                         nested_class_name = make_class_name(key)
-                        # properties[key] = Element(nested_class_name, True, False)  # Mark as list of nested class
                         properties.append(Property(
                                 key,
                                 Element(nested_class_name, True, False)  # Mark as list of nested class
                         ))
                         parse_structure(value[0], nested_class_name, key)
                     else:
-                        # properties[key] = Element("list", True, True)  # Mark as simple list
                         properties.append(Property(
                                 key,
                                 Element("list", True, True)  # Mark as simple list
                         ))
                 else:
                     # Simple types (int, str, bool, etc.)
-                    # properties[key] = Element(type(value).__name__, False, True)  # Mark as simple type
                     properties.append(Property(
                             key,
                             Element(type(value).__name__, False, True)  # Mark as simple type
                     ))
             class_definitions[Key(class_name)] = properties
         elif isinstance(structure, list) and structure and isinstance(structure[0], dict):
-            # Handle list of nested objects at root or without a parent key
             if parent_key is None:
                 class_definitions[Key(class_name, True, True)] = [Property('elements', Element('Element', True, False))]
                 parse_structure(structure[0], 'Element', class_name)
@@ -165,10 +167,6 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
         return class_code
 
     # Generate Python code for all class definitions
-    # all_classes_code = ""
-    # for class_name, properties in reversed(class_definitions.items()):
-    #     all_classes_code += generate_class_code(class_name, properties)
-
     all_classes_code = ""
     for key, properties in reversed(class_definitions.items()):
         all_classes_code += generate_class_code(key, properties)
