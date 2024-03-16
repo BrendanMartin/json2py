@@ -110,7 +110,9 @@ class GeneratorTestCase(unittest.TestCase):
             ('_foo_bar', 'foo_bar'),
             ('foo_bar__', 'foo_bar'),
             ('__N_SSG', 'n_ssg'),
-            ('__N_SSP', 'n_ssp')
+            ('__N_SSP', 'n_ssp'),
+            ('--82661', 'n82661'),
+            ('someID', 'some_id')
         ]
         for t in tests:
             res = make_field_name(t[0])

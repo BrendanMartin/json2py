@@ -13,15 +13,14 @@ reserved_words.extend(['type'])
 def make_field_name(key: str):
     field_name = ''
     prev_c = ''
-    next_c = ''
     key = key.strip('_')
+    key = key.strip('-')
     for i, c in enumerate(key):
-        if i + 1 < len(key):
-            next_c = key[i + 1]
         if c.isupper():
             # camel to snake case
-            if prev_c != '_' and not next_c.isupper():
-                field_name += '_'
+            if prev_c != '_':
+                if not (prev_c.isupper() and c.isupper()):
+                    field_name += '_'
             field_name += c.lower()
         elif i == 0 and c.isnumeric():
             field_name += f'n{c}'
