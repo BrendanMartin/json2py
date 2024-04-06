@@ -7,7 +7,7 @@ from pathlib import Path
 from json2py.generator import generate_python_classes_from_json
 
 def successfully_generated(input_file_name, output_file_name, root_class_name):
-    module_name = Path(input_file_name).stem
+    module_name = Path(output_file_name).stem
     command = (
         'python -c '
         '"import json; '
@@ -25,8 +25,6 @@ def successfully_generated(input_file_name, output_file_name, root_class_name):
         print('Successfully generated classes.\n', result.stderr)
         return True
 
-
-# TODO: input/output file names should support relative paths
 
 def main():
     parser = argparse.ArgumentParser(description='Generate Python classes from JSON.')

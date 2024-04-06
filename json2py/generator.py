@@ -130,6 +130,8 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
                 parse_structure(structure[0], 'Element', class_name)
             elif isinstance(structure[0], dict):
                 parse_structure(structure[0], class_name)
+        elif isinstance(structure, list):
+            print()
 
     # if isinstance(json_data, list):
     #     json_data = {class_name + 'Item': json_data}

@@ -1,0 +1,104 @@
+{
+  "results": [
+    {
+      "hits": [
+        {
+          "content_id": "735",
+          "title": "Introduction to Python",
+          "content_category": "learn",
+          "skill_level": [
+            "Beginner",
+            "All"
+          ],
+          "content_type": "course",
+          "technology_array": "Python",
+          "topic_array": "Programming",
+          "rating_int": 5,
+          "rating_array": [
+            "4.5 & up",
+            "4 & up",
+            "3.5 & up",
+            "3 & up",
+            "Any rating and unrated"
+          ],
+          "date_launched_array": "Any time",
+          "duration_string": "Over 3 hours",
+          "starts_int": 185271,
+          "completions_int": 33132,
+          "rating_float": 4.6833,
+          "date_launched_date": "2016-10-24",
+          "duration_float": 4,
+          "authors_array": "Hugo Bowne-Anderson",
+          "short_description": "Master the basics of data analysis with Python in just four hours. This online course will introduce the Python interface and explore popular packages.",
+          "description": "Python is a general-purpose programming language that is becoming ever more popular for data science. Companies worldwide are using Python to harvest insights from their data and gain a competitive edge. Unlike other Python tutorials, this course focuses on Python specifically for data science. In our Introduction to Python course, you’ll learn about powerful ways to store and manipulate data, and helpful data science tools to begin conducting your own analyses. Start DataCamp’s online Python curriculum now.",
+          "url": "app.datacamp.com/learn/courses/intro-to-python-for-data-science",
+          "paid": true,
+          "mobile_enabled": true,
+          "content_type_priority": 1,
+          "skill_technology_content_type": "Beginner Python Course",
+          "row_hash": "b2cfad76de995f50eaf359833ed4ed5d",
+          "objectID": "course-735",
+          "_highlightResult": {
+            "title": {
+              "value": "Introduction to Python",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "content_type": {
+              "value": "course",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "technology_array": {
+              "value": "Python",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "topic_array": {
+              "value": "Programming",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "authors_array": {
+              "value": "Hugo Bowne-Anderson",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "description": {
+              "value": "Python is a general-purpose programming language that is becoming ever more popular for data science. Companies worldwide are using Python to harvest insights from their data and gain a competitive edge. Unlike other Python tutorials, this course focuses on Python specifically for data science. In our Introduction to Python course, you’ll learn about powerful ways to store and manipulate data, and helpful data science tools to begin conducting your own analyses. Start DataCamp’s online Python curriculum now.",
+              "matchLevel": "none",
+              "matchedWords": []
+            },
+            "skill_technology_content_type": {
+              "value": "Beginner Python Course",
+              "matchLevel": "none",
+              "matchedWords": []
+            }
+          }
+        }
+      ],
+      "nbHits": 562,
+      "page": 0,
+      "nbPages": 562,
+      "hitsPerPage": 1,
+      "exhaustiveNbHits": true,
+      "exhaustiveTypo": true,
+      "exhaustive": {
+        "nbHits": true,
+        "typo": true
+      },
+      "query": "",
+      "queryAfterRemoval": "",
+      "params": "facets=%5B%5D&filters=(content_type%3A%22track%22%20OR%20content_type%3A%22course%22)&highlightPostTag=__%2Fais-highlight__&highlightPreTag=__ais-highlight__&hitsPerPage=1&query=&tagFilters=",
+      "index": "production_global_search",
+      "renderingContent": {},
+      "processingTimeMS": 1,
+      "processingTimingsMS": {
+        "_request": {
+          "roundTrip": 23
+        }
+      },
+      "serverTimeMS": 1
+    }
+  ]
+}

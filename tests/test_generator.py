@@ -48,12 +48,14 @@ class GeneratorTestCase(unittest.TestCase):
         pass
 
     def test_generator(self):
-        python_code = generate_python_classes_from_json(self.json_data)
+        python_code = generate_python_classes_from_json(self.json_data, class_name='SearchResponse', ignore_keys=['cobrandingEnabled'])
         local_env = {}
         exec(python_code, local_env, local_env) # https://stackoverflow.com/a/29979633/3711940
 
-        Root = local_env['Root']
+        Root = local_env['SearchResponse']
         root = Root(self.json_data)
+
+        print(python_code)
 
         self.assertIsNotNone(root.data.search_result)
 
@@ -123,6 +125,13 @@ class GeneratorTestCase(unittest.TestCase):
             j = json.load(f)
 
         python_code = generate_python_classes_from_json(j)
+
+    def test_array_handled(self):
+        with open(self.fixtures/'array_example.json', 'r') as f:
+            j = json.load(f)
+
+        python_code = generate_python_classes_from_json(j)
+
 
 
 if __name__ == '__main__':
