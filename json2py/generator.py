@@ -1,14 +1,15 @@
-import json
 import keyword
 import string
+import typing
 from collections import OrderedDict
 from dataclasses import dataclass
-from typing import List, Dict
-import typing
+from typing import List
+
 from nltk.corpus import wordnet as wn
 
 reserved_words = list(keyword.kwlist)
 reserved_words.extend(['type'])
+
 
 def make_field_name(key: str):
     field_name = ''
@@ -81,6 +82,7 @@ class Property:
 
 def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=List[str]):
     class_definitions: typing.OrderedDict[Key, List[Property]] = OrderedDict()
+    class_names = {}
     imports = ""
 
     # TODO: check if key in properties or class_definitions already. If so, update name to be <parent><name>
@@ -97,6 +99,10 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
                 # Handle nested dictionary
                 if isinstance(value, dict) and len(value.keys()) > 0:
                     nested_class_name = make_class_name(key)
+                    # avoid duplicates
+                    if nested_class_name in class_names:
+                        nested_class_name += nested_class_name
+                    class_names[nested_class_name] = True
                     properties.append(Property(
                             key,
                             Element(nested_class_name, False, False)  # (class name, is list, is simple type)
@@ -107,6 +113,10 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
                     if value and isinstance(value[0], dict):
                         # List of dictionaries
                         nested_class_name = make_class_name(key)
+                        # avoid duplicates
+                        if nested_class_name in class_names:
+                            nested_class_name += nested_class_name
+                        class_names[nested_class_name] = True
                         properties.append(Property(
                                 key,
                                 Element(nested_class_name, True, False)  # Mark as list of nested class

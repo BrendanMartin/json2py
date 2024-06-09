@@ -6,6 +6,7 @@ from pathlib import Path
 
 from json2py.generator import generate_python_classes_from_json
 
+
 def successfully_generated(input_file_name, output_file_name, root_class_name):
     module_name = Path(output_file_name).stem
     command = (
@@ -31,7 +32,8 @@ def main():
     parser.add_argument('-i', '--input', required=True, help='Input JSON file')
     parser.add_argument('-o', '--output', help='Output Python file')
     parser.add_argument('-r', '--root-class-name', default='Root', help='Root class name')
-    parser.add_argument('-ik', '--ignore-keys', help='Ignore creating fields or classes matching a list of comma-separated keys')
+    parser.add_argument('-ik', '--ignore-keys',
+                        help='Ignore creating fields or classes matching a list of comma-separated keys')
 
     args = parser.parse_args()
 
@@ -60,6 +62,7 @@ def main():
 
     if not successfully_generated(input_file_name, output_file_name, root_class_name):
         return
+
 
 if __name__ == '__main__':
     main()
