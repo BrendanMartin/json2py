@@ -101,7 +101,7 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
                     nested_class_name = make_class_name(key)
                     # avoid duplicates
                     if nested_class_name in class_names:
-                        nested_class_name += nested_class_name
+                        nested_class_name = class_name + nested_class_name
                     class_names[nested_class_name] = True
                     properties.append(Property(
                             key,
@@ -115,7 +115,7 @@ def generate_python_classes_from_json(json_data, class_name="Root", ignore_keys=
                         nested_class_name = make_class_name(key)
                         # avoid duplicates
                         if nested_class_name in class_names:
-                            nested_class_name += nested_class_name
+                            nested_class_name = class_name + nested_class_name
                         class_names[nested_class_name] = True
                         properties.append(Property(
                                 key,
