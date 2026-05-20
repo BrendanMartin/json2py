@@ -2,9 +2,12 @@ import argparse
 import json
 import subprocess
 import sys
+from collections import OrderedDict
 from pathlib import Path
 
 from json2py.generator import generate_python_classes_from_json
+
+import json, hashlib
 
 
 def successfully_generated(input_file_name, output_file_name, root_class_name):
@@ -26,6 +29,21 @@ def successfully_generated(input_file_name, output_file_name, root_class_name):
         print('Successfully generated classes.\n', result.stderr)
         return True
 
+
+def shape(obj, path=""):
+    """Yield (path, type) for every leaf and node."""
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            yield f"{path}.{k}", type(v).__name__
+            yield from shape(v, f"{path}.{k}")
+    elif isinstance(obj, list) and obj:
+        yield from shape(obj[0], f"{path}[]")
+
+def object_hash(d: dict) -> str:
+    sh = dict(shape(d))
+    enc = str(sh).encode('utf8')
+    h = hashlib.md5(enc)
+    return h.hexdigest()
 
 def main():
     parser = argparse.ArgumentParser(description='Generate Python classes from JSON.')
@@ -54,11 +72,14 @@ def main():
 
     command = f"\"\"\"\nGenerated with:\njson2py {' '.join(sys.argv[1:])}\n\"\"\"\n\n"
 
-    class_definitions = command + class_definitions
+    h = object_hash(json_data)
+    hash_line = f"__input_hash__ = {h}\n\n"
+
+    file_content = command + hash_line + class_definitions
 
     # Write the generated classes to the output file
     with open(output_file_name, 'w') as output_file:
-        output_file.write(class_definitions)
+        output_file.write(file_content)
 
     if not successfully_generated(input_file_name, output_file_name, root_class_name):
         return
